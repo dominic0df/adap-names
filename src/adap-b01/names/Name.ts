@@ -16,6 +16,7 @@ export class Name {
     /** Returns human-readable representation of Name instance */
     /** @methodtype: conversion method */
     public asNameString(delimiter: string = this.delimiter): string {
+        // escape already existing delimiters
         const escapedComponents = this.components.map(name =>
             name.includes(delimiter) ? name.replace(new RegExp(delimiter, 'g'), this.ESCAPE_CHARACTER + delimiter) : name
         );
