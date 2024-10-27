@@ -45,7 +45,7 @@ export class Name {
 
     /** @methodtype: command-method */
     public insert(i: number, c: string): void {
-        if (this.isNumberInRange(i)) {
+        if (i !== undefined && i >= 0 && i <= this.components.length) {
             this.components.splice(i, 0, c);
         }
         throw new Error("IndexOutOfBoundsException");
