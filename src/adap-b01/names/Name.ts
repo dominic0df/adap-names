@@ -16,7 +16,9 @@ export class Name {
     /** Returns human-readable representation of Name instance */
     /** @methodtype: conversion method */
     public asNameString(delimiter: string = this.delimiter): string {
-        return this.components.join(this.ESCAPE_CHARACTER + delimiter);
+        let joined = this.components.join(delimiter);
+        joined = joined.replace(this.ESCAPE_CHARACTER, "");
+        return joined;
     }
 
     /** @methodtype: getter method */
