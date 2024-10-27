@@ -7,37 +7,61 @@ export class Name {
     private delimiter: string = this.DEFAULT_DELIMITER;
 
     constructor(other: string[], delimiter?: string) {
-        throw new Error("needs implementation");
+        this.components = other;
+        if (delimiter !== null && delimiter !== undefined) {
+            this.delimiter = delimiter;
+        }
     }
 
     /** Returns human-readable representation of Name instance */
+    /** @methodtype: conversion method */
     public asNameString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation");
+        return this.components.join(this.ESCAPE_CHARACTER + delimiter);
     }
 
+    /** @methodtype: getter method */
     public getComponent(i: number): string {
-        throw new Error("needs implementation");
+        if (this.isNumberInRange(i)) {
+            return this.components[i];
+        }
+        throw new Error("IndexOutOfBoundsException");
     }
 
+    /** @methodtype: setter method */
     public setComponent(i: number, c: string): void {
-        throw new Error("needs implementation");
+        if (this.isNumberInRange(i)) {
+            this.components[i] = c;
+        }
+        throw new Error("IndexOutOfBoundsException");
     }
 
-     /** Returns number of components in Name instance */
-     public getNoComponents(): number {
-        throw new Error("needs implementation");
+    /** Returns number of components in Name instance */
+    /** @methodtype: getter method */
+    public getNoComponents(): number {
+        return this.components.length;
     }
 
+    /** @methodtype: command-method */
     public insert(i: number, c: string): void {
-        throw new Error("needs implementation");
+        if (this.isNumberInRange(i)) {
+            this.components.splice(i, 0, c);
+        }
+        throw new Error("IndexOutOfBoundsException");
     }
 
+    /** @methodtype: command-method */
     public append(c: string): void {
-        throw new Error("needs implementation");
+        this.components.push(c);
     }
 
+    /** @methodtype: command-method */
     public remove(i: number): void {
-        throw new Error("needs implementation");
+        this.components.splice(i, 1);
+    }
+
+    /** @methodtype: boolean query method */
+    private isNumberInRange(i: number): boolean {
+        return i !== undefined && i >= 0 && i < this.components.length;
     }
 
 }
