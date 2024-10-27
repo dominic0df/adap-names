@@ -33,8 +33,9 @@ export class Name {
     public setComponent(i: number, c: string): void {
         if (this.isNumberInRange(i)) {
             this.components[i] = c;
+        } else {
+            throw new Error("IndexOutOfBoundsException");
         }
-        throw new Error("IndexOutOfBoundsException");
     }
 
     /** Returns number of components in Name instance */
@@ -47,8 +48,9 @@ export class Name {
     public insert(i: number, c: string): void {
         if (i !== undefined && i >= 0 && i <= this.components.length) {
             this.components.splice(i, 0, c);
+        } else {
+            throw new Error("IndexOutOfBoundsException");
         }
-        throw new Error("IndexOutOfBoundsException");
     }
 
     /** @methodtype: command-method */
