@@ -8,15 +8,15 @@ export class StringName implements Name {
     protected length: number = 0;
 
     constructor(other: string, delimiter?: string) {
-       if(delimiter !== undefined){
-        this.delimiter = delimiter;
-       }
-       this.name = other;
-       this.length = other.split(this.delimiter).length;
+        if (delimiter !== undefined) {
+            this.delimiter = delimiter;
+        }
+        this.name = other;
+        this.length = other.split(this.delimiter).length;
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        return this.name.replaceAll(ESCAPE_CHARACTER + this.delimiter, delimiter);
+        return this.name.replaceAll(this.delimiter, delimiter);
     }
 
     public asDataString(): string {
@@ -44,7 +44,7 @@ export class StringName implements Name {
 
     public setComponent(n: number, c: string): void {
         if (this.isIndexInComponentsArrayBounds(n)) {
-            if(c !== null){
+            if (c !== null) {
                 let components = this.getComponentsOfNameString(this.name);
                 components[n] = c;
                 this.setNameGivenComponentsArray(components);
@@ -58,7 +58,7 @@ export class StringName implements Name {
 
     public insert(n: number, c: string): void {
         if (n !== undefined && n >= 0 && n <= this.length) {
-            if(c !== null){
+            if (c !== null) {
                 let components = this.getComponentsOfNameString(this.name);
                 components.splice(n, 0, c);
                 this.length++;
@@ -92,17 +92,42 @@ export class StringName implements Name {
     public concat(other: Name): void {
         let otherAsName = other.asDataString();
         let otherAsComponents = this.getComponentsOfNameString(otherAsName);
-        for(let component of otherAsComponents){
+        for (let component of otherAsComponents) {
             this.append(component);
         }
     }
 
     private getComponentsOfNameString(name: string): string[] {
-        return name.split(ESCAPE_CHARACTER + this.delimiter);
+        let components: string[] = [];
+        let currentComponent: string = "";
+        let charIndex = 0;
+
+        while (charIndex < name.length) {
+            if (name[charIndex] === ESCAPE_CHARACTER && charIndex + 1 < name.length && name[charIndex + 1] === this.delimiter) {
+                // next char is delimiter, skip escape
+                currentComponent += this.delimiter;
+                charIndex += 2;
+            } else if (name[charIndex] === this.delimiter) {
+                // unescaped delimiter -> split
+                components.push(currentComponent);
+                currentComponent = "";
+                charIndex++;
+            } else {
+                currentComponent += name[charIndex];
+                charIndex++;
+            }
+        }
+        components.push(currentComponent);
+
+        return components;
     }
 
+
     private setNameGivenComponentsArray(components: string[]): void {
-        this.name = components.join(ESCAPE_CHARACTER + this.delimiter);
+        this.name = components
+            // escape delimiters in an array
+            .map(component => component.replace(this.delimiter, ESCAPE_CHARACTER + this.delimiter))
+            .join(this.delimiter);
     }
 
     private isIndexInComponentsArrayBounds(i: number): boolean {
