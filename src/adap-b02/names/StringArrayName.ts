@@ -5,6 +5,7 @@ export class StringArrayName implements Name {
     protected components: string[] = [];
     protected delimiter: string = DEFAULT_DELIMITER;
 
+    // @methodtype initialization method
     constructor(other: string[], delimiter?: string) {
         this.components = other;
         if (delimiter !== null && delimiter !== undefined) {
@@ -12,6 +13,7 @@ export class StringArrayName implements Name {
         }
     }
 
+    // @methodtype conversion method
     public asString(delimiter: string = this.delimiter): string {
         return this.components
             .map((substring) =>
@@ -19,29 +21,29 @@ export class StringArrayName implements Name {
             .join(delimiter);
     }
 
+    // @methodtype conversion method
     public asDataString(): string {
         return this.components.map((substring) => substring
             .replaceAll(this.delimiter, ESCAPE_CHARACTER + this.delimiter))
             .join(this.delimiter);
     }
 
-    /** @methodtype: boolean query method */
+    // @methodtype boolean query method
     public isEmpty(): boolean {
         return this.getNoComponents() === 0;
     }
 
-    /** @methodtype: getter method */
+    // @methodtype get method
     public getDelimiterCharacter(): string {
         return this.delimiter;
     }
 
-    /** Returns number of components in Name instance */
-    /** @methodtype: getter method */
+    // @methodtype get method
     public getNoComponents(): number {
         return this.components.length;
     }
 
-    /** @methodtype: getter method */
+    // @methodtype get method
     public getComponent(i: number): string {
         if (this.isIndexInComponentsArrayBounds(i)) {
             return this.components[i];
@@ -49,7 +51,7 @@ export class StringArrayName implements Name {
         throw new Error("index is out of bounds");
     }
 
-    /** @methodtype: setter method */
+    // @methodtype set method
     public setComponent(i: number, c: string): void {
         if (this.isIndexInComponentsArrayBounds(i)) {
             if (c !== null) {
@@ -62,7 +64,7 @@ export class StringArrayName implements Name {
         }
     }
 
-    /** @methodtype: command-method */
+    // @methodtype command method
     public insert(i: number, c: string): void {
         if (i !== undefined && i >= 0 && i <= this.components.length) {
             if (c !== null) {
@@ -75,12 +77,12 @@ export class StringArrayName implements Name {
         }
     }
 
-    /** @methodtype: command-method */
+    // @methodtype command method
     public append(c: string): void {
         this.components.push(c);
     }
 
-    /** @methodtype: command-method */
+    // @methodtype command method
     public remove(i: number): void {
         if (this.isIndexInComponentsArrayBounds(i)) {
             this.components.splice(i, 1);
@@ -89,9 +91,10 @@ export class StringArrayName implements Name {
         }
     }
 
+    // @methodtype command method
     public concat(other: Name): void {
         if (this.delimiter !== other.getDelimiterCharacter()) {
-            throw new Error("names must have the same delimiters for concatination");
+            throw new Error("names must have the same delimiters for concatenation");
         }
         for (let componentIndex = 0; componentIndex < other.getNoComponents(); componentIndex++) {
             let component = other.getComponent(componentIndex);
@@ -99,6 +102,7 @@ export class StringArrayName implements Name {
         }
     }
 
+    // @methodtype assertion method
     private isIndexInComponentsArrayBounds(i: number): boolean {
         return i !== undefined && i >= 0 && i < this.components.length;
     }

@@ -3,38 +3,44 @@ import { Name, DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "./Name";
 export class StringName implements Name {
 
     protected delimiter: string = DEFAULT_DELIMITER;
-
     protected name: string = "";
     protected length: number = 0;
 
+    // @methodtype initialization method
     constructor(other: string, delimiter?: string) {
-        if (delimiter !== undefined) {
-            this.delimiter = delimiter;
-        }
-        this.name = other;
+       if(delimiter !== undefined){
+        this.delimiter = delimiter;
+       }
+       this.name = other;
         this.length = other.split(this.delimiter).length;
     }
 
+    // @methodtype conversion method
     public asString(delimiter: string = this.delimiter): string {
         return this.name.replaceAll(this.delimiter, delimiter);
     }
 
+    // @methodtype conversion method
     public asDataString(): string {
         return this.name;
     }
 
+    // @methodtype boolean query method
     public isEmpty(): boolean {
         return this.length === 0;
     }
 
+    // @methodtype get method
     public getDelimiterCharacter(): string {
         return this.delimiter;
     }
 
+    // @methodtype get method
     public getNoComponents(): number {
         return this.length;
     }
 
+    // @methodtype get method
     public getComponent(x: number): string {
         if (this.isIndexInComponentsArrayBounds(x)) {
             return this.getComponentsOfNameString(this.name)[x];
@@ -42,9 +48,10 @@ export class StringName implements Name {
         throw new Error("index is out of bounds");
     }
 
+    // @methodtype set method
     public setComponent(n: number, c: string): void {
         if (this.isIndexInComponentsArrayBounds(n)) {
-            if (c !== null) {
+            if(c !== null){
                 let components = this.getComponentsOfNameString(this.name);
                 components[n] = c;
                 this.setNameGivenComponentsArray(components);
@@ -56,9 +63,10 @@ export class StringName implements Name {
         }
     }
 
+    // @methodtype command method
     public insert(n: number, c: string): void {
         if (n !== undefined && n >= 0 && n <= this.length) {
-            if (c !== null) {
+            if(c !== null){
                 let components = this.getComponentsOfNameString(this.name);
                 components.splice(n, 0, c);
                 this.length++;
@@ -71,6 +79,7 @@ export class StringName implements Name {
         }
     }
 
+    // @methodtype command method
     public append(c: string): void {
         let components = this.getComponentsOfNameString(this.name);
         components.push(c);
@@ -78,6 +87,7 @@ export class StringName implements Name {
         this.setNameGivenComponentsArray(components);
     }
 
+    // @methodtype command method
     public remove(n: number): void {
         if (this.isIndexInComponentsArrayBounds(n)) {
             let components = this.getComponentsOfNameString(this.name);
@@ -89,14 +99,16 @@ export class StringName implements Name {
         }
     }
 
+    // @methodtype command method
     public concat(other: Name): void {
         let otherAsName = other.asDataString();
         let otherAsComponents = this.getComponentsOfNameString(otherAsName);
-        for (let component of otherAsComponents) {
+        for(let component of otherAsComponents){
             this.append(component);
         }
     }
 
+    // @methodtype helper method
     private getComponentsOfNameString(name: string): string[] {
         let components: string[] = [];
         let currentComponent: string = "";
@@ -130,6 +142,7 @@ export class StringName implements Name {
             .join(this.delimiter);
     }
 
+    // @methodtype assertion method
     private isIndexInComponentsArrayBounds(i: number): boolean {
         return i !== undefined && i >= 0 && i < this.length;
     }
