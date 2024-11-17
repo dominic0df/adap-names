@@ -20,6 +20,8 @@ export class StringName extends AbstractName {
         if (this.isIndexInComponentsArrayBounds(i)) {
             return this.getComponentsOfNameString(this.name)[i];
         }
+        // is achieved also by the superclass method, but this is not recognized
+        throw new Error("index is out of bounds");
     }
 
     setComponent(i: number, c: string) {
