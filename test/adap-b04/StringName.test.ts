@@ -1,4 +1,4 @@
-import { describe, it, expect, test, toThrow } from "vitest";
+import { describe, expect, test } from "vitest";
 import {StringName} from "../../src/adap-b04/names/StringName";
 import {IllegalArgumentException} from "../../src/adap-b04/common/IllegalArgumentException";
 
