@@ -21,8 +21,12 @@ export abstract class AbstractName implements Name {
         this.assertIsValidDelimiterCharacter(delimiter);
         let result = "";
         for (let component = 0; component < this.getNoComponents(); component++) {
-            const part = this.getComponent(component).replaceAll(ESCAPE_CHARACTER, '');
-            result = result + delimiter + part;
+            let part = this.getComponent(component).replaceAll(ESCAPE_CHARACTER, '');
+            if (result !== ""){
+                result = result + delimiter + part;
+            } else {
+                result = part;
+            }
         }
         return result;
     }
