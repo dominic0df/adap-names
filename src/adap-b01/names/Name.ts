@@ -1,3 +1,5 @@
+import {ESCAPE_CHARACTER} from "../../adap-b02/names/Name";
+
 export class Name {
 
     public readonly DEFAULT_DELIMITER: string = '.';
@@ -21,6 +23,15 @@ export class Name {
             name.includes(delimiter) ? name.replace(new RegExp(delimiter, 'g'), this.ESCAPE_CHARACTER + delimiter) : name
         );
         return escapedComponents.join(delimiter);
+    }
+
+    /** Returns human-readable representation of Name instance */
+    /** @methodtype: conversion method */
+    public asString(delimiter: string = this.delimiter): string {
+        return this.components
+            .map((substring) =>
+                substring.replaceAll(ESCAPE_CHARACTER, ''))
+            .join(delimiter);
     }
 
     /** @methodtype: getter method */
