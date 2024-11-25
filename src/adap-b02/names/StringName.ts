@@ -8,10 +8,10 @@ export class StringName implements Name {
 
     // @methodtype initialization method
     constructor(other: string, delimiter?: string) {
-       if(delimiter !== undefined){
-        this.delimiter = delimiter;
-       }
-       this.name = other;
+        if(delimiter !== undefined){
+            this.delimiter = delimiter;
+        }
+        this.name = other;
         this.length = other.split(this.delimiter).length;
     }
 

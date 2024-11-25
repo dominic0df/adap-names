@@ -1,5 +1,4 @@
-import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
-import { Name } from "./Name";
+import { Name, DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "./Name";
 
 export abstract class AbstractName implements Name {
 
