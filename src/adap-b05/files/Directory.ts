@@ -1,6 +1,7 @@
 import {Node} from "./Node";
 import {IllegalArgumentException} from "../../adap-b04/common/IllegalArgumentException";
 import {ServiceFailureException} from "../common/ServiceFailureException";
+import {Exception} from "../common/Exception";
 
 export class Directory extends Node {
 
@@ -34,9 +35,9 @@ export class Directory extends Node {
             })
             this.assertClassInvariants();
             return nodes;
-        } catch (error) {
+        } catch (e: Exception) {
             const message = 'Failed to find nodes with basename ' + bn;
-            throw new ServiceFailureException(message, error);
+            throw new ServiceFailureException(message, e);
         }
     }
 }
