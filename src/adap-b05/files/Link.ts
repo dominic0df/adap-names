@@ -1,6 +1,6 @@
 import {Node} from "./Node";
 import {Directory} from "./Directory";
-import {ServiceFailureException} from "../common/ServiceFailureException";
+import {ExceptionType} from "../common/AssertionDispatcher";
 
 export class Link extends Node {
 
@@ -30,7 +30,7 @@ export class Link extends Node {
     }
 
     public rename(bn: string): void {
-        this.assertIsValidBaseName(bn);
+        this.assertIsValidBaseName(bn, ExceptionType.PRECONDITION);
         const target = this.ensureTargetNode(this.targetNode);
         target.rename(bn);
     }

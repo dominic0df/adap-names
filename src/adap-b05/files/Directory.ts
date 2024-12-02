@@ -35,7 +35,8 @@ export class Directory extends Node {
             this.assertClassInvariants();
             return nodes;
         } catch (error) {
-            throw new ServiceFailureException('Failed to find nodes with basename ' + bn, error);
+            const message = 'Failed to find nodes with basename ' + bn;
+            throw new ServiceFailureException(message, error);
         }
     }
 }
