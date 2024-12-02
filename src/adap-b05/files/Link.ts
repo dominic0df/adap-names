@@ -1,5 +1,6 @@
-import { Node } from "./Node";
-import { Directory } from "./Directory";
+import {Node} from "./Node";
+import {Directory} from "./Directory";
+import {ServiceFailureException} from "../common/ServiceFailureException";
 
 export class Link extends Node {
 
@@ -9,6 +10,7 @@ export class Link extends Node {
         super(bn, pn);
 
         if (tn != undefined) {
+            this.assertNodeIsValid(tn);
             this.targetNode = tn;
         }
     }
@@ -18,6 +20,7 @@ export class Link extends Node {
     }
 
     public setTargetNode(target: Node): void {
+        this.assertNodeIsValid(target);
         this.targetNode = target;
     }
 
@@ -27,6 +30,7 @@ export class Link extends Node {
     }
 
     public rename(bn: string): void {
+        this.assertIsValidBaseName(bn);
         const target = this.ensureTargetNode(this.targetNode);
         target.rename(bn);
     }
@@ -34,5 +38,13 @@ export class Link extends Node {
     protected ensureTargetNode(target: Node | null): Node {
         const result: Node = this.targetNode as Node;
         return result;
+    }
+
+    public findNodes(bn: string): Set<Node> {
+        let nodes = super.findNodes(bn);
+        const targetNode = this.ensureTargetNode(this.targetNode);
+        targetNode.findNodes(bn).forEach(node => nodes.add(node));
+        this.assertClassInvariants()
+        return nodes;
     }
 }

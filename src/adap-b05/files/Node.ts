@@ -1,9 +1,9 @@
-import { ExceptionType, AssertionDispatcher } from "../common/AssertionDispatcher";
-import { IllegalArgumentException } from "../common/IllegalArgumentException";
-import { InvalidStateException } from "../common/InvalidStateException";
+import {AssertionDispatcher, ExceptionType} from "../common/AssertionDispatcher";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
 
-import { Name } from "../names/Name";
-import { Directory } from "./Directory";
+import {Name} from "../names/Name";
+import {Directory} from "./Directory";
+import {ServiceFailureException} from "../common/ServiceFailureException";
 
 export class Node {
 
@@ -11,6 +11,8 @@ export class Node {
     protected parentNode: Directory;
 
     constructor(bn: string, pn: Directory) {
+        this.assertIsValidBaseName(bn, ExceptionType.PRECONDITION);
+        this.assertIsValidDirectory(pn);
         this.doSetBaseName(bn);
         this.parentNode = pn; // why oh why do I have to set this
         this.initialize(pn);
@@ -22,6 +24,7 @@ export class Node {
     }
 
     public move(to: Directory): void {
+        this.assertIsValidDirectory(to);
         this.parentNode.remove(this);
         to.add(this);
         this.parentNode = to;
@@ -42,6 +45,7 @@ export class Node {
     }
 
     public rename(bn: string): void {
+        this.assertIsValidBaseName(bn, ExceptionType.PRECONDITION);
         this.doSetBaseName(bn);
     }
 
@@ -58,7 +62,12 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        let set = new Set<Node>;
+        if (this.getBaseName() === bn) {
+            set.add(this);
+        }
+        this.assertClassInvariants();
+        return set;
     }
 
     protected assertClassInvariants(): void {
@@ -69,6 +78,14 @@ export class Node {
     protected assertIsValidBaseName(bn: string, et: ExceptionType): void {
         const condition: boolean = (bn != "");
         AssertionDispatcher.dispatch(et, condition, "invalid base name");
+    }
+
+    protected assertIsValidDirectory(directory: Directory): void {
+        IllegalArgumentException.assertIsNotNullOrUndefined(directory);
+    }
+
+    protected assertNodeIsValid(cn: Node): void {
+        IllegalArgumentException.assertIsNotNullOrUndefined(cn);
     }
 
 }

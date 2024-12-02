@@ -1,6 +1,7 @@
 import { Node } from "./Node";
 import { Directory } from "./Directory";
 import { MethodFailedException } from "../common/MethodFailedException";
+import {InvalidStateException} from "../../adap-b04/common/InvalidStateException";
 
 enum FileState {
     OPEN,
@@ -17,7 +18,7 @@ export class File extends Node {
     }
 
     public open(): void {
-        // do something
+        this.assertFileIsOpen();
     }
 
     public read(noBytes: number): Int8Array {
@@ -44,11 +45,22 @@ export class File extends Node {
     }
 
     public close(): void {
-        // do something
+        this.assertFileIsClosed();
     }
 
     protected doGetFileState(): FileState {
         return this.state;
     }
 
+    private assertFileIsOpen(): void{
+        InvalidStateException.assertIsNotNullOrUndefined(this.state);
+        const condition = this.doGetFileState() == FileState.OPEN;
+        InvalidStateException.assertCondition(condition, "Can not open file that has already been opened");
+    }
+
+    private assertFileIsClosed(): void{
+        InvalidStateException.assertIsNotNullOrUndefined(this.state);
+        const condition = this.doGetFileState() == FileState.CLOSED;
+        InvalidStateException.assertCondition(condition, "Can not close file that has already been closed");
+    }
 }

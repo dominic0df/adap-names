@@ -8,64 +8,95 @@ export class StringName extends AbstractName {
     protected noComponents: number = 0;
 
     constructor(other: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+        if (delimiter === undefined){
+            super();
+        } else {
+            super(delimiter);
+        }
+        this.assertStringIsNotNull(other);
+        this.name = other;
+        this.noComponents = other.split(this.delimiter).length;
     }
 
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
+    getNoComponents(): number {
+        return this.noComponents;
     }
 
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+    getComponent(i: number): string {
+        this.assertIndexIsInComponentsArrayBounds(i)
+        return this.getComponentsOfNameString(this.name)[i];
     }
 
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+    setComponent(i: number, c: string) {
+        this.assertIndexIsInComponentsArrayBounds(i)
+        this.assertStringIsNotNull(c)
+        let components = this.getComponentsOfNameString(this.name);
+        components[i] = c;
+        this.setNameGivenComponentsArray(components);
+
+
     }
 
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
+    insert(i: number, c: string) {
+        this.assertStringIsInsertableAtIndex(i)
+        this.assertStringIsNotNull(c)
+        let components = this.getComponentsOfNameString(this.name);
+        components.splice(i, 0, c);
+        this.noComponents++;
+        this.setNameGivenComponentsArray(components);
+
     }
 
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
+    append(c: string) {
+        this.assertStringIsNotNull(c);
+        let components = this.getComponentsOfNameString(this.name);
+        components.push(c);
+        this.noComponents++;
+        this.setNameGivenComponentsArray(components);
     }
 
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+    remove(i: number) {
+        this.assertIndexIsInComponentsArrayBounds(i)
+        let components = this.getComponentsOfNameString(this.name);
+        components.splice(i, 1);
+        this.noComponents--;
+        this.setNameGivenComponentsArray(components);
+
     }
 
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+    private getComponentsOfNameString(name: string): string[] {
+        this.assertStringIsNotNull(name);
+        let components: string[] = [];
+        let currentComponent: string = "";
+        let charIndex = 0;
+
+        while (charIndex < name.length) {
+            if (name[charIndex] === ESCAPE_CHARACTER && charIndex + 1 < name.length && name[charIndex + 1] === this.delimiter) {
+                // next char is delimiter, skip escape
+                currentComponent += this.delimiter;
+                charIndex += 2;
+            } else if (name[charIndex] === this.delimiter) {
+                // unescaped delimiter -> split
+                components.push(currentComponent);
+                currentComponent = "";
+                charIndex++;
+            } else {
+                currentComponent += name[charIndex];
+                charIndex++;
+            }
+        }
+        components.push(currentComponent);
+
+        return components;
     }
 
-    public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
-    }
 
-    public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public append(c: string) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+    private setNameGivenComponentsArray(components: string[]): void {
+        this.assertIsValidComponentsArray(components);
+        this.name = components
+            // escape delimiters in an array
+            .map(component => component.replace(this.delimiter, ESCAPE_CHARACTER + this.delimiter))
+            .join(this.delimiter);
     }
 
 }

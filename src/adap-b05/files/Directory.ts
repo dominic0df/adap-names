@@ -1,4 +1,6 @@
-import { Node } from "./Node";
+import {Node} from "./Node";
+import {IllegalArgumentException} from "../../adap-b04/common/IllegalArgumentException";
+import {ServiceFailureException} from "../common/ServiceFailureException";
 
 export class Directory extends Node {
 
@@ -9,11 +11,31 @@ export class Directory extends Node {
     }
 
     public add(cn: Node): void {
+        this.assertNodeIsValid(cn);
         this.childNodes.add(cn);
     }
 
     public remove(cn: Node): void {
-        this.childNodes.delete(cn); // Yikes! Should have been called remove
+        this.assertDirectoryContainsNode(cn);
+        this.childNodes.delete(cn);
     }
 
+    private assertDirectoryContainsNode(cn: Node): void {
+        IllegalArgumentException.assertIsNotNullOrUndefined(cn);
+        const condition = this.childNodes.has(cn);
+        IllegalArgumentException.assertCondition(condition, "The required node does not exist in childNodes");
+    }
+
+    public findNodes(bn: string): Set<Node> {
+        try {
+            let nodes = super.findNodes(bn);
+            this.childNodes.forEach((child) => {
+                child.findNodes(bn).forEach((node) => nodes.add(node));
+            })
+            this.assertClassInvariants();
+            return nodes;
+        } catch (error) {
+            throw new ServiceFailureException('Failed to find nodes with basename ' + bn, error);
+        }
+    }
 }
