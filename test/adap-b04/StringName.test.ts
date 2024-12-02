@@ -10,13 +10,11 @@ describe("StringName Tests", () => {
         expect(() => name.getComponent(10)).toThrow(IllegalArgumentException);
     });
 
-
     test("throw IllegalArgumentException for invalid index in insert", () => {
         const name = new StringName("test");
         expect(() => name.insert(-1, "new")).toThrow(IllegalArgumentException);
         expect(() => name.insert(10, "new")).toThrow(IllegalArgumentException);
     });
-
 
     test("throw IllegalArgumentException for invalid index in remove", () => {
         const name = new StringName("test");

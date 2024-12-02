@@ -1,6 +1,9 @@
+import { ExceptionType, AssertionDispatcher } from "../common/AssertionDispatcher";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
+import { InvalidStateException } from "../common/InvalidStateException";
+
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
-import {IllegalArgumentException} from "../common/IllegalArgumentException";
 
 export class Node {
 
@@ -8,8 +11,6 @@ export class Node {
     protected parentNode: Directory;
 
     constructor(bn: string, pn: Directory) {
-        this.assertIsValidBaseName(bn);
-        this.assertIsValidDirectory(pn);
         this.doSetBaseName(bn);
         this.parentNode = pn; // why oh why do I have to set this
         this.initialize(pn);
@@ -21,7 +22,6 @@ export class Node {
     }
 
     public move(to: Directory): void {
-        this.assertIsValidDirectory(to);
         this.parentNode.remove(this);
         to.add(this);
         this.parentNode = to;
@@ -42,12 +42,10 @@ export class Node {
     }
 
     public rename(bn: string): void {
-        this.assertIsValidBaseName(bn);
         this.doSetBaseName(bn);
     }
 
     protected doSetBaseName(bn: string): void {
-        this.assertIsValidBaseName(bn);
         this.baseName = bn;
     }
 
@@ -55,17 +53,22 @@ export class Node {
         return this.parentNode;
     }
 
-    protected assertIsValidBaseName(baseName: string): void{
-        IllegalArgumentException.assertIsNotNullOrUndefined(baseName);
-        const condition = baseName.length > 0;
-        IllegalArgumentException.assertCondition(condition, "base name must not be empty")
+    /**
+     * Returns all nodes in the tree that match bn
+     * @param bn basename of node being searched for
+     */
+    public findNodes(bn: string): Set<Node> {
+        throw new Error("needs implementation or deletion");
     }
 
-    protected assertIsValidDirectory(directory: Directory): void {
-        IllegalArgumentException.assertIsNotNullOrUndefined(directory);
+    protected assertClassInvariants(): void {
+        const bn: string = this.doGetBaseName();
+        this.assertIsValidBaseName(bn, ExceptionType.CLASS_INVARIANT);
     }
 
-    protected assertNodeIsValid(cn: Node): void {
-        IllegalArgumentException.assertIsNotNullOrUndefined(cn);
+    protected assertIsValidBaseName(bn: string, et: ExceptionType): void {
+        const condition: boolean = (bn != "");
+        AssertionDispatcher.dispatch(et, condition, "invalid base name");
     }
+
 }
