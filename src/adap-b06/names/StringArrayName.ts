@@ -1,4 +1,5 @@
 import { AbstractName } from "./AbstractName";
+import {Name} from "./Name";
 
 export class StringArrayName extends AbstractName {
 
@@ -27,7 +28,7 @@ export class StringArrayName extends AbstractName {
         return [...this.components];
     }
 
-    protected doCreate(components: string[], delimiter: string){
+    protected doCreate(components: string[], delimiter: string): Name{
         return new StringArrayName(components, delimiter);
     }
 

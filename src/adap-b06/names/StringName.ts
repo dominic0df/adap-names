@@ -1,5 +1,6 @@
 import { ESCAPE_CHARACTER } from "../common/Printable";
 import { AbstractName } from "./AbstractName";
+import {Name} from "./Name";
 
 export class StringName extends AbstractName {
 
@@ -26,7 +27,7 @@ export class StringName extends AbstractName {
         return this.getComponents()[i];
     }
 
-    doCreate(components: string[], delimiter: string) {
+    doCreate(components: string[], delimiter: string): Name {
         const nameAsString = this.getNameStringFromComponentsArray(components)
         return new StringName(nameAsString, delimiter);
     }
