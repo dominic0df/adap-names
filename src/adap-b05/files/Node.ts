@@ -11,8 +11,6 @@ export class Node {
     protected parentNode: Directory;
 
     constructor(bn: string, pn: Directory) {
-        this.assertIsValidBaseName(bn, ExceptionType.PRECONDITION);
-        this.assertIsValidDirectory(pn);
         this.doSetBaseName(bn);
         this.parentNode = pn; // why oh why do I have to set this
         this.initialize(pn);
@@ -24,7 +22,6 @@ export class Node {
     }
 
     public move(to: Directory): void {
-        this.assertIsValidDirectory(to);
         this.parentNode.remove(this);
         to.add(this);
         this.parentNode = to;
@@ -79,13 +76,4 @@ export class Node {
         const condition: boolean = (bn != "");
         AssertionDispatcher.dispatch(et, condition, "invalid base name");
     }
-
-    protected assertIsValidDirectory(directory: Directory): void {
-        IllegalArgumentException.assertIsNotNullOrUndefined(directory);
-    }
-
-    protected assertNodeIsValid(cn: Node): void {
-        IllegalArgumentException.assertIsNotNullOrUndefined(cn);
-    }
-
 }

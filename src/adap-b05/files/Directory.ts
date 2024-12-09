@@ -12,7 +12,6 @@ export class Directory extends Node {
     }
 
     public add(cn: Node): void {
-        this.assertNodeIsValid(cn);
         this.childNodes.add(cn);
     }
 
@@ -22,9 +21,8 @@ export class Directory extends Node {
     }
 
     private assertDirectoryContainsNode(cn: Node): void {
-        IllegalArgumentException.assertIsNotNullOrUndefined(cn);
         const condition = this.childNodes.has(cn);
-        IllegalArgumentException.assertCondition(condition, "The required node does not exist in childNodes");
+        IllegalArgumentException.assert(condition, "The required node does not exist in childNodes");
     }
 
     public findNodes(bn: string): Set<Node> {

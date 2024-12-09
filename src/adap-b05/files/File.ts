@@ -53,14 +53,12 @@ export class File extends Node {
     }
 
     private assertFileIsOpen(): void{
-        InvalidStateException.assertIsNotNullOrUndefined(this.state);
         const condition = this.doGetFileState() == FileState.OPEN;
-        InvalidStateException.assertCondition(condition, "Can not open file that has already been opened");
+        InvalidStateException.assert(condition, "Can not open file that has already been opened");
     }
 
     private assertFileIsClosed(): void{
-        InvalidStateException.assertIsNotNullOrUndefined(this.state);
         const condition = this.doGetFileState() == FileState.CLOSED;
-        InvalidStateException.assertCondition(condition, "Can not close file that has already been closed");
+        InvalidStateException.assert(condition, "Can not close file that has already been closed");
     }
 }

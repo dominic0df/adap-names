@@ -10,7 +10,6 @@ export class Link extends Node {
         super(bn, pn);
 
         if (tn != undefined) {
-            this.assertNodeIsValid(tn);
             this.targetNode = tn;
         }
     }
@@ -20,7 +19,6 @@ export class Link extends Node {
     }
 
     public setTargetNode(target: Node): void {
-        this.assertNodeIsValid(target);
         this.targetNode = target;
     }
 

@@ -58,7 +58,7 @@ export class Node {
     protected assertIsValidBaseName(baseName: string): void{
         IllegalArgumentException.assertIsNotNullOrUndefined(baseName);
         const condition = baseName.length > 0;
-        IllegalArgumentException.assertCondition(condition, "base name must not be empty")
+        IllegalArgumentException.assert(condition, "base name must not be empty")
     }
 
     protected assertIsValidDirectory(directory: Directory): void {
