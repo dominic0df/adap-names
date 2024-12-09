@@ -47,7 +47,6 @@ export abstract class AbstractName implements Name {
     }
 
     public isEqual(other: Name): boolean {
-        this.assertNameIsNotNull(other);
         return this.getHashCode() === other.getHashCode();
     }
 
@@ -87,7 +86,6 @@ export abstract class AbstractName implements Name {
 
     public concat(other: Name): void {
         this.assertClassInvariants();
-        this.assertNameIsNotNull(other);
         for (let component = 0; component < other.getNoComponents(); component++) {
             this.append(other.getComponent(component));
         }
@@ -98,29 +96,27 @@ export abstract class AbstractName implements Name {
 
     protected assertIndexIsInComponentsArrayBounds(i: number) {
         const condition = i >= 0 && i < this.getNoComponents();
-        IllegalArgumentException.assertCondition(condition, "index out of bounds");
+        IllegalArgumentException.assert(condition, "index out of bounds");
     }
 
     protected assertStringIsInsertableAtIndex(i: number) {
         const condition = i >= 0 && i <= this.getNoComponents();
-        IllegalArgumentException.assertCondition(condition, "index out of bounds");
+        IllegalArgumentException.assert(condition, "index out of bounds");
     }
 
     protected assertStringIsNotNull(c: string) {
-        IllegalArgumentException.assertIsNotNullOrUndefined(c);
-    }
-
-    protected assertNameIsNotNull(other: Name) {
-        IllegalArgumentException.assertIsNotNullOrUndefined(other);
+        const isNotUndefined = c != undefined;
+        IllegalArgumentException.assert(isNotUndefined, "input string must not be undefined");
     }
 
     protected assertValidDelimiterCharacter(delimiter: string){
         let condition: boolean = delimiter.length == 1;
-        InvalidStateException.assertCondition(condition, "invalid delimiter char");
+        InvalidStateException.assert(condition, "invalid delimiter char");
     }
 
     protected assertIsValidDelimiterCharacter(delimiter: string){
-        IllegalArgumentException.assertIsNotNullOrUndefined(delimiter);
+        const isNotUndefined = delimiter != undefined;
+        IllegalArgumentException.assert(isNotUndefined, "delimiter must not be undefined");
         this.assertValidDelimiterCharacter(delimiter);
     }
 
@@ -129,8 +125,7 @@ export abstract class AbstractName implements Name {
     }
 
     protected assertIsValidComponentsArray(other: string[]){
-        IllegalArgumentException.assertIsNotNullOrUndefined(other);
         const condition = other.length > 0;
-        IllegalArgumentException.assertCondition(condition, "string array must have components");
+        IllegalArgumentException.assert(condition, "string array must have components");
     }
 }
