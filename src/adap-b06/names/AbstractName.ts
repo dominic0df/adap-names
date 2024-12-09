@@ -116,7 +116,7 @@ export abstract class AbstractName implements Name {
 
     public abstract getComponents(): string[];
 
-    public abstract doCreate(components: string[], delimiter: string);
+    public abstract doCreate(components: string[], delimiter: string): Name;
 
     //#############################################################//
     // Design by Contract helper methods
